@@ -1,4 +1,4 @@
-# ♟️ 中国象棋 - 3D AI 超难版 (Xiangqi 3D AI)
+# ♟️ 中国象棋 - 3D AI (Xiangqi 3D AI)
 
 <p align="center">
   <i>纯前端打造的极致视觉体验，搭载专业级国际象棋引擎算法的超难对手！ \^o^/</i>
