@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中国象棋‑3D AI超难版 v10.2</title>
+  <!-- 外部依赖 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+  <!-- 引入你自己的 CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="board-wrapper" id="board">
+      <div class="grid-lines" id="gridLines"></div>
+      <div class="river"><span>楚 河</span><span>汉 界</span></div>
+    </div>
+    <div class="sidebar">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold" style="color:#f0f0f0">中国象棋‑3D AI超难版</h1>
+        <div class="text-xs px-2 py-1 rounded" style="background:rgba(255,255,255,0.1);color:#b0b8c8">v10.2 3D</div>
+      </div>
+      <div class="status-card">
+        <div class="text-sm mb-1">当前回合</div>
+        <div id="turnIndicator" class="text-xl font-bold flex items-center gap-2" style="color:#ff6b6b"><i class="fa fa-user"></i> 红方 (玩家)</div>
+      </div>
+      <div class="status-card">
+        <div class="text-sm mb-1">游戏状态</div>
+        <div id="gameStatus" class="text-lg font-semibold" style="color:#5dff9e">进行中</div>
+      </div>
+      <div class="status-card">
+        <div class="text-sm mb-2">AI难度</div>
+        <select id="aiLevelSelect">
+          <option value="1">简单</option>
+          <option value="3">普通</option>
+          <option value="5">困难</option>
+          <option value="7" selected>专家(很强)</option>
+        </select>
+      </div>
+      <div class="status-card">
+        <div class="text-sm mb-2">战况</div>
+        <div class="mb-1 text-xs">红方损失:</div>
+        <div id="capturedRed" class="captured-area"></div>
+        <div class="mt-2 mb-1 text-xs">黑方损失:</div>
+        <div id="capturedBlack" class="captured-area"></div>
+      </div>
+      <div class="mt-auto flex flex-col gap-3">
+        <button onclick="game.restart()" class="btn btn-primary"><i class="fa fa-redo"></i> 重新开始</button>
+        <button onclick="game.undo()" class="btn btn-secondary" id="undoBtn"><i class="fa fa-undo"></i> 悔棋</button>
+      </div>
+      <div class="text-xs mt-2 text-center" style="color:#8890a0">WebWorker｜杀法识别｜3D立体｜MVV‑LVV｜开局库</div>
+    </div>
+  </div>
+
+  <!-- 引入 JS -->
+  <script src="script.js"></script>
+</body>
+</html>
