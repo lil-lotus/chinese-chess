@@ -1,0 +1,277 @@
+:root{
+  --board-bg:#d9b382;
+  --line-color:#4a2e1a;
+  --piece-size:44px;
+}
+body{
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  user-select:none;
+}
+.game-container{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  padding:2rem;
+  border-radius:1.2rem;
+  box-shadow:0 25px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+  display:flex;gap:2rem;max-width:1000px;width:95%;
+  border:1px solid rgba(255,255,255,0.1);
+}
+@media(max-width:768px){
+  .game-container{flex-direction:column;align-items:center;padding:1rem}
+  .board-wrapper{transform:scale(.9)}
+}
+/* ========== 3D 棋盘（无 3D 旋转，点击准确） ========== */
+.board-wrapper{
+  position:relative;
+  width:460px;height:520px;
+  background:linear-gradient(145deg,#c49a62,#a67b45);
+  border-radius:12px;
+  box-shadow:
+    0 12px 0 -4px #8b5e2b,
+    0 16px 0 -6px #6d4520,
+    0 20px 0 -8px #3d2810,
+    0 28px 40px rgba(0,0,0,0.6),
+    inset 0 0 50px rgba(0,0,0,0.2);
+  margin-top:10px;
+  margin-bottom:24px;
+}
+.board-wrapper::before{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:12px;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,240,210,0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(255,230,180,0.2) 0%, transparent 50%),
+    repeating-linear-gradient(92deg, transparent, transparent 38px, rgba(120,70,20,0.06) 40px, transparent 42px);
+  pointer-events:none;
+  z-index:1;
+}
+.grid-lines{
+  position:absolute;top:25px;left:25px;
+  width:410px;height:470px;
+  pointer-events:none;
+  z-index:2;
+}
+.grid-line-h{
+  position:absolute;height:2px;
+  background:linear-gradient(90deg,transparent,#3d2810 3%,#3d2810 97%,transparent);
+  width:100%;
+  box-shadow:0 1px 1px rgba(255,255,255,0.15);
+}
+.grid-line-v{
+  position:absolute;width:2px;
+  background:linear-gradient(180deg,transparent,#3d2810 3%,#3d2810 97%,transparent);
+  height:100%;
+  box-shadow:1px 0 1px rgba(255,255,255,0.12);
+}
+.river{
+  position:absolute;top:225px;left:1px;
+  width:408px;height:58px;
+  background:linear-gradient(180deg,rgba(217,179,130,0.9),rgba(190,148,100,0.95),rgba(217,179,130,0.9));
+  display:flex;justify-content:space-around;align-items:center;
+  font-size:26px;color:#3d2810;font-weight:900;
+  letter-spacing:6px;
+  z-index:1;pointer-events:none;
+  text-shadow:0 2px 3px rgba(255,255,255,0.4), 0 -1px 0 rgba(0,0,0,0.3);
+  border-top:1px solid rgba(100,60,20,0.4);
+  border-bottom:1px solid rgba(100,60,20,0.4);
+  font-family:'KaiTi','STKaiti',serif;
+}
+.slash{
+  position:absolute;width:2px;
+  background:#3d2810;
+  transform-origin:top left;
+  pointer-events:none;
+  box-shadow:1px 0 1px rgba(255,255,255,0.1);
+}
+/* ========== 3D 棋子 ========== */
+.piece{
+  width:var(--piece-size);
+  height:var(--piece-size);
+  border-radius:50%;
+  position:absolute;
+  display:flex;justify-content:center;align-items:center;
+  font-size:23px;font-weight:900;
+  cursor:pointer;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s;
+  z-index:10;
+  font-family:'KaiTi','STKaiti','SimSun',serif;
+  box-shadow:
+    0 4px 0 -1px #8a5a2b,
+    0 6px 8px rgba(0,0,0,0.45),
+    0 8px 14px rgba(0,0,0,0.3),
+    inset 0 2px 3px rgba(255,255,255,0.6),
+    inset 0 -3px 4px rgba(0,0,0,0.25);
+  background:radial-gradient(circle at 35% 28%, #fff8ec 0%, #f5e6cc 35%, #e8d4b0 60%, #d4b98a 100%);
+  border:2px solid #a0703a;
+  text-shadow:0 1px 1px rgba(255,255,255,0.6), 0 -1px 1px rgba(0,0,0,0.2);
+}
+.piece::before{
+  content:'';
+  position:absolute;inset:3px;
+  border-radius:50%;
+  border:1.5px solid rgba(140,90,40,0.35);
+  pointer-events:none;
+}
+.piece::after{
+  content:'';
+  position:absolute;top:4px;left:8px;
+  width:40%;height:30%;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,255,255,0.7) 0%,transparent 70%);
+  pointer-events:none;
+}
+.piece.red{
+  color:#b81414;
+  border-color:#8b1a1a;
+  background:radial-gradient(circle at 35% 28%, #fff5e8 0%, #f7e2c4 35%, #ecd0a8 60%, #d4b080 100%);
+  box-shadow:
+    0 4px 0 -1px #8a3a1a,
+    0 6px 8px rgba(0,0,0,0.45),
+    0 8px 14px rgba(0,0,0,0.3),
+    inset 0 2px 3px rgba(255,255,255,0.6),
+    inset 0 -3px 4px rgba(0,0,0,0.25);
+}
+.piece.black{
+  color:#111;
+  border-color:#3a3a3a;
+  background:radial-gradient(circle at 35% 28%, #f0f0ea 0%, #e0ddd2 35%, #c8c4b5 60%, #a8a490 100%);
+  box-shadow:
+    0 4px 0 -1px #3a3a3a,
+    0 6px 8px rgba(0,0,0,0.45),
+    0 8px 14px rgba(0,0,0,0.3),
+    inset 0 2px 3px rgba(255,255,255,0.5),
+    inset 0 -3px 4px rgba(0,0,0,0.3);
+}
+.piece.selected{
+  transform:scale(1.15) translateY(-4px);
+  box-shadow:
+    0 8px 0 -1px #b8860b,
+    0 12px 14px rgba(0,0,0,0.5),
+    0 16px 24px rgba(0,0,0,0.35),
+    0 0 25px #ffeb3b,
+    inset 0 2px 4px rgba(255,255,255,0.8),
+    inset 0 -3px 5px rgba(0,0,0,0.3);
+  z-index:20;
+  background:radial-gradient(circle at 35% 28%, #ffffff 0%, #fff5e0 35%, #ffe8b8 60%, #f0d090 100%);
+}
+.piece.last-move{
+  box-shadow:
+    0 4px 0 -1px #2e7d32,
+    0 6px 8px rgba(0,0,0,0.45),
+    0 0 0 3px rgba(76,175,80,0.9),
+    0 8px 14px rgba(0,0,0,0.3),
+    inset 0 2px 3px rgba(255,255,255,0.6),
+    inset 0 -3px 4px rgba(0,0,0,0.25);
+}
+.piece.check{
+  box-shadow:
+    0 4px 0 -1px #c62828,
+    0 6px 8px rgba(0,0,0,0.45),
+    0 0 0 4px rgba(255,0,0,0.95),
+    0 0 20px rgba(255,0,0,0.8),
+    0 8px 14px rgba(0,0,0,0.3),
+    inset 0 2px 3px rgba(255,255,255,0.6),
+    inset 0 -3px 4px rgba(0,0,0,0.25);
+  animation:pulse-check 0.9s infinite alternate;
+}
+@keyframes pulse-check{
+  from{box-shadow:0 4px 0 -1px #c62828,0 6px 8px rgba(0,0,0,0.45),0 0 0 4px rgba(255,0,0,0.95),0 0 20px rgba(255,0,0,0.8),0 8px 14px rgba(0,0,0,0.3),inset 0 2px 3px rgba(255,255,255,0.6),inset 0 -3px 4px rgba(0,0,0,0.25)}
+  to{box-shadow:0 4px 0 -1px #c62828,0 6px 8px rgba(0,0,0,0.45),0 0 0 6px rgba(255,0,0,1),0 0 35px rgba(255,50,50,1),0 8px 14px rgba(0,0,0,0.3),inset 0 2px 3px rgba(255,255,255,0.6),inset 0 -3px 4px rgba(0,0,0,0.25)}
+}
+/* 走子提示点 */
+.dot{
+  width:14px;height:14px;
+  background:radial-gradient(circle at 35% 30%, #66ff88, #00aa44);
+  border-radius:50%;
+  position:absolute;
+  transform:translate(-50%,-50%);
+  z-index:15;
+  cursor:pointer;
+  box-shadow:0 3px 0 #006633, 0 4px 8px rgba(0,0,0,0.5), 0 0 12px rgba(0,255,100,0.7);
+  transition:all .15s;
+  border:1px solid rgba(255,255,255,0.5);
+}
+.dot:hover{
+  background:radial-gradient(circle at 35% 30%, #88ffaa, #00cc55);
+  transform:translate(-50%,-50%) scale(1.25);
+  box-shadow:0 5px 0 #008844, 0 8px 14px rgba(0,0,0,0.6), 0 0 20px rgba(0,255,100,0.9);
+}
+/* 特效 */
+.effect-flag{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(.4);
+  font-size:96px;font-weight:900;letter-spacing:4px;
+  z-index:200;pointer-events:none;user-select:none;opacity:0;
+  font-family:'KaiTi','STKaiti',serif;
+}
+.effect-flag.general{
+  color:#ff2222;
+  text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 30px #ff4444,0 0 60px #ff2222,4px 4px 0 #fff,-4px -4px 0 #fff;
+  animation:flagPop 1.6s ease-out forwards;
+}
+.effect-flag.capture{
+  color:#ffb020;
+  text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 30px #ffcc33,4px 4px 0 #fff,-4px -4px 0 #fff;
+  animation:flagPop 1.4s ease-out forwards;
+}
+@keyframes flagPop{
+  0%{transform:translate(-50%,-50%) scale(.4);opacity:0}
+  18%{transform:translate(-50%,-50%) scale(1.25);opacity:1}
+  35%{transform:translate(-50%,-50%) scale(1.1) rotate(-3deg);opacity:1}
+  50%{transform:translate(-50%,-50%) scale(1.15) rotate(3deg);opacity:1}
+  68%{transform:translate(-50%,-50%) scale(1.1) rotate(-2deg);opacity:1}
+  82%{transform:translate(-50%,-50%) scale(1.08);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.15);opacity:0}
+}
+/* 侧栏 */
+.sidebar{display:flex;flex-direction:column;gap:1rem;min-width:280px}
+.status-card{
+  background:rgba(255,255,255,0.07);
+  backdrop-filter:blur(8px);
+  padding:1rem;border-radius:.75rem;
+  border-left:4px solid #4a9eff;
+  box-shadow:0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+  color:#e0e0e0;
+}
+.status-card .text-sm{color:#aab0c0}
+.text-gray-500{color:#aab0c0!important}
+.text-gray-800{color:#e8e8e8!important}
+.text-green-600{color:#5dff9e!important}
+.text-red-600{color:#ff6b6b!important}
+.text-gray-400{color:#8890a0!important}
+.btn{
+  padding:.75rem 1.5rem;border-radius:.6rem;font-weight:600;cursor:pointer;
+  transition:all .2s;border:none;display:flex;align-items:center;justify-content:center;gap:.5rem;
+  box-shadow:0 4px 0 rgba(0,0,0,0.3), 0 6px 14px rgba(0,0,0,0.3);
+  transform:translateY(0);position:relative;
+}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,0.3)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3)}
+.btn-primary{background:linear-gradient(180deg,#4a9eff,#2563eb);color:#fff}
+.btn-primary:hover{background:linear-gradient(180deg,#5ba8ff,#3b82f6)}
+.btn-secondary{background:linear-gradient(180deg,#6b7280,#4b5563);color:#fff}
+.btn-secondary:hover{background:linear-gradient(180deg,#7c8595,#5a6370)}
+.captured-area{
+  min-height:40px;background:rgba(0,0,0,0.2);border-radius:.5rem;padding:.5rem;
+  display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start;
+  border:1px solid rgba(255,255,255,0.08);
+}
+.captured-piece{
+  width:22px;height:22px;font-size:12px;border-radius:50%;
+  display:flex;justify-content:center;align-items:center;
+  border:1px solid #999;background:linear-gradient(145deg,#f5e6cc,#d4b98a);
+  color:#333;font-weight:700;
+  box-shadow:0 2px 3px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.6);
+}
+.captured-piece.red{color:#b81414;border-color:#8b1a1a;background:linear-gradient(145deg,#fff5e8,#ecd0a8)}
+.captured-piece.black{color:#111;border-color:#3a3a3a;background:linear-gradient(145deg,#f0f0ea,#c8c4b5)}
+select{
+  padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);
+  background:rgba(0,0,0,0.3);color:#e0e0e0;font-size:14px;
+}
+option{background:#1e2a3a;color:#e0e0e0}
+h1{color:#f0f0f0!important;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
